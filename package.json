@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "docker-client": "^1.38.1",
+    "express": "^4.19.2"
+  }
+}
