@@ -33,7 +33,7 @@ COPY --from=builder /usr/src/app/package*.json ./
 COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy the needed dockerfiles to the dockerfiles folder
-COPY --from=builder /usr/src/app/src/dockerfiles/*.yml ./dist/dockerfiles/.
+COPY --from=builder /usr/src/app/src/dockerfiles/*.yml ./dist/dockerfiles/
 
 # Install production dependencies
 RUN npm ci --only=production
@@ -45,4 +45,4 @@ COPY . .
 EXPOSE 4000
 
 # Start the application using PM2
-CMD ["pm2-runtime", "main.js"]
+CMD ["pm2-runtime", "dist/main.js"]
