@@ -1,0 +1,17 @@
+services:
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "${COMPOSE_PORT}:11434"
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${NVIDIA_VISIBLE_DEVICES}"]
+              capabilities: [gpu]
+
+volumes:
+  ollama:
