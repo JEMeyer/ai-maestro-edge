@@ -49,7 +49,11 @@ export async function loadModelToGPUs(
   containerName: string,
   modelName: string
 ) {
-  await exec(containerName, `ollama run ${modelName}`, {
+  await exec(containerName, `ollama pull ${modelName}`, {
+    cwd: join(__dirname, '..', 'dockerfiles'),
+    config: 'docker-compose-ollama-gpu.yml',
+  });
+  await exec(containerName, `ollama keep-alive ${modelName} -1`, {
     cwd: join(__dirname, '..', 'dockerfiles'),
     config: 'docker-compose-ollama-gpu.yml',
   });
