@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import {
   loadModelToGPUs,
   startOllamaContainer,
+  stopOllamaContainer,
 } from './docker-helpers/ollama-docker';
 
 const app = express();
@@ -15,12 +16,21 @@ interface MakeContainerProps {
   gpuIds: string[];
 }
 
-// Endpoing to create a new instance (or make sure it's up)
-app.post('/make-container', async (req, res) => {
+// Endpoing to create/destroy a new instance (or make sure it's up)
+app.post('/up-container', async (req, res) => {
   const { containerName, gpuIds, port } = req.body as MakeContainerProps;
 
   // Spin up Docker container with specified name, GPU, port
   await startOllamaContainer(containerName, gpuIds, port);
+
+  res.sendStatus(200);
+});
+
+app.post('/down-container', async (req, res) => {
+  const { containerName } = req.body as { containerName: string };
+
+  // Spin up Docker container with specified name, GPU, port
+  await stopOllamaContainer(containerName);
 
   res.sendStatus(200);
 });
