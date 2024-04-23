@@ -1,4 +1,4 @@
-import { downOne, exec, upOne } from 'docker-compose/dist/v2';
+import { downAll, downOne, exec, upOne } from 'docker-compose/dist/v2';
 import { join } from 'path';
 
 export async function startOllamaContainer(
@@ -29,6 +29,19 @@ export async function stopOllamaContainer(containerName: string) {
     console.log(`Container ${containerName} stopped successfully.`);
   } catch (error) {
     console.error(`Error stopping container ${containerName}:`, error);
+  }
+}
+
+export async function stopAllOllamaContainers() {
+  try {
+    await downAll({
+      cwd: join(__dirname, '..', 'dockerfiles'),
+      config: 'docker-compose-ollama-gpu.yml',
+      log: true,
+    });
+    console.log(`All containers stopped successfully.`);
+  } catch (error) {
+    console.error(`Error stopping containers:`, error);
   }
 }
 

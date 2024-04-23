@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import {
   loadModelToGPUs,
   startOllamaContainer,
+  stopAllOllamaContainers,
   stopOllamaContainer,
 } from './docker-helpers/ollama-docker';
 
@@ -31,6 +32,13 @@ app.post('/down-container', async (req, res) => {
 
   // Spin up Docker container with specified name, GPU, port
   await stopOllamaContainer(containerName);
+
+  res.sendStatus(200);
+});
+
+app.post('/down-all-containers', async (_req, res) => {
+  // Spin up Docker container with specified name, GPU, port
+  await stopAllOllamaContainers();
 
   res.sendStatus(200);
 });
