@@ -7,25 +7,26 @@ export async function startOllamaContainer(
   port: string
 ) {
   await upOne('ollama', {
-    commandOptions: ['--project-name', containerName],
+    commandOptions: ['--project-name', 'ollama'],
     env: {
       NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
       COMPOSE_PORT: port,
     },
-    cwd: join(__dirname, '..', 'dockerfiles'),
-    config: 'docker-compose-ollama-gpu.yml',
     log: true,
+    composeOptions: [
+      '--file',
+      '../dockerfiles/docker-compose-ollama-gpu.yml',
+      'up',
+      '-d',
+      '--no-recreate',
+      `--name ${containerName}`,
+    ],
   });
 }
 
 export async function stopOllamaContainer(containerName: string) {
   try {
-    await downOne(containerName, {
-      commandOptions: ['--project-name', containerName],
-      cwd: join(__dirname, '..', 'dockerfiles'),
-      config: 'docker-compose-ollama-gpu.yml',
-      log: true,
-    });
+    await downOne(containerName);
     console.log(`Container ${containerName} stopped successfully.`);
   } catch (error) {
     console.error(`Error stopping container ${containerName}:`, error);
