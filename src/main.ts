@@ -11,15 +11,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-interface MakeContainerProps {
-  containerName: string;
-  port: string;
-  gpuIds: string[];
-}
-
 // Endpoing to create/destroy a new instance (or make sure it's up)
 app.post('/up-container', async (req, res) => {
-  const { containerName, gpuIds, port } = req.body as MakeContainerProps;
+  const { containerName, gpuIds, port } = req.body as {
+    containerName: string;
+    port: string;
+    gpuIds: string[];
+  };
 
   // Spin up Docker container with specified name, GPU, port
   await startOllamaContainer(containerName, gpuIds, port);
@@ -43,14 +41,12 @@ app.post('/down-all-containers', async (_req, res) => {
   res.sendStatus(200);
 });
 
-interface LoadModelProps {
-  modelName: string;
-  containerName: string;
-}
-
 // Endpoint to receive command to load model
 app.post('/load-model', async (req: Request, res: Response) => {
-  const { modelName, containerName } = req.body as LoadModelProps;
+  const { modelName, containerName } = req.body as {
+    modelName: string;
+    containerName: string;
+  };
 
   // run 'ollama run MODEL' command for the given container and model
   await loadModelToGPUs(containerName, modelName);
