@@ -42,7 +42,7 @@ export async function stopAllOllamaContainers() {
     });
     console.log(`All containers stopped successfully.`);
   } catch (error) {
-    console.error(`Error stopping containers:`, error);
+    console.error(`Error ollama stopping containers:`, error);
   }
 }
 
