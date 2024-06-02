@@ -25,7 +25,8 @@ export async function startOllamaContainer(
     await upOne('ollama', options);
   } catch (error) {
     console.error(
-      `Error starting container ${containerName} with gpus ${gpuIds} on port ${port}: ${error}`
+      `Error starting container ${containerName} with gpus ${gpuIds} on port ${port}:`,
+      error
     );
   }
 }
@@ -38,7 +39,7 @@ export async function stopOllamaContainer(containerName: string) {
     });
     console.log(`Container ${containerName} stopped successfully.`);
   } catch (error) {
-    console.error(`Error stopping container ${containerName}: ${error}`);
+    console.error(`Error stopping container ${containerName}:`, error);
   }
 }
 
@@ -70,7 +71,8 @@ export async function loadModelToGPUs(
     });
   } catch (error) {
     console.error(
-      `Error starting model ${modelName}, for container ${containerName}. Error: ${error}`
+      `Error starting model ${modelName}, for container ${containerName}:`,
+      error
     );
   }
 }
