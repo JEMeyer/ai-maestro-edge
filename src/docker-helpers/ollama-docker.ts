@@ -7,7 +7,6 @@ export async function startOllamaContainer(
   port: string
 ) {
   await upOne('ollama', {
-    commandOptions: ['--project-name', 'ollama'],
     env: {
       NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
       COMPOSE_PORT: port,
