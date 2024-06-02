@@ -1,5 +1,5 @@
 {
-  "name": "llm-manager-edge",
+  "name": "@jemeyer/llm-manager-edge",
   "version": "1.0.0",
   "description": "REST API to control LLM Docker containers",
   "main": "dist/main.js",
