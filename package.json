@@ -1,18 +1,34 @@
 {
   "name": "llm-manager-node",
   "version": "1.0.0",
-  "description": "REST api to control llm docker containers",
-  "main": "main.js",
+  "description": "REST API to control LLM Docker containers",
+  "main": "dist/main.js",
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc",
     "start": "node dist/main.js",
     "dev": "tsc-watch --onSuccess \"node dist/main.js\"",
     "lint": "eslint --fix \"src/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "llm-manager": "dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JEMeyer/llm-manager-node.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist",
+    "src",
+    "package.json",
+    "README.md"
+  ],
   "author": "Joe Meyer",
   "dependencies": {
-    "docker-compose": "^0.24.8",
     "express": "^4.19.2"
   },
   "devDependencies": {

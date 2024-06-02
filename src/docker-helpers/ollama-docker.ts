@@ -1,7 +1,4 @@
-import { downAll, downOne, exec, upOne } from 'docker-compose/dist/v2';
-import { join } from 'path';
-
-const dockerFilesPath = join(__dirname, '..', 'dockerfiles');
+import { execSync } from 'child_process';
 
 export async function startOllamaContainer(
   containerName: string,
@@ -9,23 +6,22 @@ export async function startOllamaContainer(
   port: string
 ) {
   try {
-    const options = {
-      cwd: dockerFilesPath,
-      env: {
-        NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
-        COMPOSE_PORT: port,
-        CONTAINER_NAME: containerName,
-      },
-      config: 'docker-compose-ollama-gpu.yml',
-      log: true,
-    };
+    const gpuDevices = gpuIds.join(',');
+    const command = `docker run -d \
+    --name ${containerName} \
+    -p ${port}:11434 \
+    -v ./sharedOllamaDir:/root/.ollama \
+    --gpus '"device=${gpuDevices}"' \
+    ollama/ollama
+  `;
 
-    console.log('Starting container with the following options:', options);
+    console.log('Starting container with the following command:', command);
 
-    await upOne('ollama', options);
+    execSync(command, { stdio: 'inherit' });
+    console.log(`Container ${containerName} started successfully.`);
   } catch (error) {
     console.error(
-      `Error starting container ${containerName} with gpus ${gpuIds} on port ${port}:`,
+      `Error starting container ${containerName} with GPUs ${gpuIds} on port ${port}:`,
       error
     );
   }
@@ -33,11 +29,9 @@ export async function startOllamaContainer(
 
 export async function stopOllamaContainer(containerName: string) {
   try {
-    await downOne(containerName, {
-      cwd: dockerFilesPath,
-      config: 'docker-compose-ollama-gpu.yml',
-    });
-    console.log(`Container ${containerName} stopped successfully.`);
+    execSync(`docker stop ${containerName}`, { stdio: 'inherit' });
+    execSync(`docker rm ${containerName}`, { stdio: 'inherit' });
+    console.log(`Container ${containerName} stopped and removed successfully.`);
   } catch (error) {
     console.error(`Error stopping container ${containerName}:`, error);
   }
@@ -45,12 +39,23 @@ export async function stopOllamaContainer(containerName: string) {
 
 export async function stopAllOllamaContainers() {
   try {
-    await downAll({
-      cwd: dockerFilesPath,
-      config: 'docker-compose-ollama-gpu.yml',
-      log: true,
-    });
-    console.log(`All containers stopped successfully.`);
+    // Get all container IDs for containers with the name "ollama"
+    const containerIds = execSync(
+      `docker ps -q --filter "ancestor=ollama/ollama"`
+    )
+      .toString()
+      .trim();
+
+    if (containerIds) {
+      // Stop all containers with the ancestor "ollama/ollama"
+      execSync(`docker stop ${containerIds}`, { stdio: 'inherit' });
+      execSync(`docker rm ${containerIds}`, { stdio: 'inherit' });
+      console.log(
+        `All containers with ancestor "ollama/ollama" stopped and removed successfully.`
+      );
+    } else {
+      console.log(`No containers with ancestor "ollama/ollama" found.`);
+    }
   } catch (error) {
     console.error(`Error stopping all ollama containers:`, error);
   }
@@ -61,14 +66,19 @@ export async function loadModelToGPUs(
   modelName: string
 ) {
   try {
-    await exec(containerName, `ollama pull ${modelName}`, {
-      cwd: dockerFilesPath,
-      config: 'docker-compose-ollama-gpu.yml',
+    // Run the 'ollama pull' command inside the container
+    execSync(`docker exec ${containerName} ollama pull ${modelName}`, {
+      stdio: 'inherit', // This will print the output to the console
     });
-    await exec(containerName, `ollama keep-alive ${modelName} -1`, {
-      cwd: dockerFilesPath,
-      config: 'docker-compose-ollama-gpu.yml',
+
+    // Run the 'ollama keep-alive' command inside the container
+    execSync(`docker exec ${containerName} ollama keep-alive ${modelName} -1`, {
+      stdio: 'inherit', // This will print the output to the console
     });
+
+    console.log(
+      `Model ${modelName} loaded and kept alive for container ${containerName}.`
+    );
   } catch (error) {
     console.error(
       `Error starting model ${modelName}, for container ${containerName}:`,
