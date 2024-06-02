@@ -18,8 +18,6 @@ export async function startOllamaContainer(
     composeOptions: [
       '--file',
       'docker-compose-ollama-gpu.yml',
-      'up',
-      '-d',
       '--no-recreate',
     ],
   });
