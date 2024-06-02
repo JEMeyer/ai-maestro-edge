@@ -7,10 +7,13 @@ RUN apk add --no-cache docker docker-cli-compose shadow
 # Install PM2 globally
 RUN npm install -g pm2
 
+# Create a non-root user and add it to the docker group
 ARG USERNAME=appuser
-RUN adduser --disabled-password --gecos "" $USERNAME
-RUN addgroup $USERNAME docker
-USER $USERNAME
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN addgroup -g $USER_GID $USERNAME && \
+    adduser --disabled-password -u $USER_UID -G $USERNAME $USERNAME && \
+    addgroup $USERNAME docker
 
 # Builder stage
 FROM base AS builder
