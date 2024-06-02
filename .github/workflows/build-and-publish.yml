@@ -35,9 +35,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get UID and GID
+        id: ids
+        run: |
+          echo "USER_UID=$(id -u)" >> $GITHUB_ENV
+          echo "USER_GID=$(id -g)" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.3.0
         with:
           context: .
           push: true
           tags: ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}:latest
+          build-args: |
+            USER_UID=${{ env.USER_UID }}
+            USER_GID=${{ env.USER_GID }}
