@@ -8,8 +8,12 @@ export function getMappedPort(containerName: string, containerPort: number) {
     const output = execSync(command).toString().trim();
 
     // Extract the host port from the output
-    const hostPort = output.split(':')[1];
-    return hostPort;
+    const match = output.match(/:(\d+)/);
+    if (match) {
+      return match[1];
+    } else {
+      throw new Error('Port mapping not found');
+    }
   } catch (error) {
     console.error('Error getting mapped port:', error);
     return null;

@@ -77,6 +77,8 @@ export async function loadModelToGPUs(
     // Get the port on this machine for the particular container's ollama port
     const port = getMappedPort(containerName, 11434);
 
+    console.log(`Determined ${containerName} is running on port ${port}.`);
+
     // Run the 'ollama keep-alive' command inside the container
     const response = await fetch(`http://localhost:${port}/api/generate`, {
       method: 'POST',
