@@ -26,7 +26,8 @@
   ],
   "author": "Joe Meyer",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "minimalist": "^1.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

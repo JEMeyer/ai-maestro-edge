@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import minimist from 'minimist';
 
 import {
   loadModelToGPUs,
@@ -6,6 +7,9 @@ import {
   stopAllOllamaContainers,
   stopOllamaContainer,
 } from './docker-helpers/ollama-docker';
+
+const args = minimist(process.argv.slice(2));
+const port = args.port || 4000;
 
 const app = express();
 app.use(express.json());
@@ -59,6 +63,6 @@ app.get('/health', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(4000, () => {
-  console.log('Child server listening on port 4000');
+app.listen(port, () => {
+  console.log(`Edge server listening on port ${port}`);
 });
