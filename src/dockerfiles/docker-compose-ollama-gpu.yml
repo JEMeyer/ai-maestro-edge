@@ -12,3 +12,4 @@ services:
             - driver: nvidia
               device_ids: ['${NVIDIA_VISIBLE_DEVICES}']
               capabilities: [gpu]
+    container_name: ${CONTAINER_NAME}

@@ -11,6 +11,7 @@ export async function startOllamaContainer(
     env: {
       NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
       COMPOSE_PORT: port,
+      CONTAINER_NAME: containerName,
     },
     log: true,
     composeOptions: [
@@ -19,7 +20,6 @@ export async function startOllamaContainer(
       'up',
       '-d',
       '--no-recreate',
-      `--name ${containerName}`,
     ],
   });
 }
