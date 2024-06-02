@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
 
 jobs:
   publish:
@@ -26,12 +21,6 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@jemeyer'
-
-      - name: Create .npmrc file
-        run: |
-          echo "@jemeyer:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=\${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Install dependencies
         run: npm ci
