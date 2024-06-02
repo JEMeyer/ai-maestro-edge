@@ -1,11 +1,11 @@
 {
   "name": "llm-manager-edge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "REST API to control LLM Docker containers",
   "main": "dist/main.js",
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc",
+    "build": "tsc && node add-shebang.js",
     "start": "node dist/main.js",
     "dev": "tsc-watch --onSuccess \"node dist/main.js\"",
     "lint": "eslint --fix \"src/**/*.ts\"",
