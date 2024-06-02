@@ -4,13 +4,13 @@ FROM node:18-alpine as base
 # Install Docker CLI and Docker Compose
 RUN apk add --no-cache docker docker-cli-compose shadow
 
+# Install PM2 globally
+RUN npm install -g pm2
+
 ARG USERNAME=appuser
 RUN adduser --disabled-password --gecos "" $USERNAME
 RUN addgroup $USERNAME docker
 USER $USERNAME
-
-# Install PM2 globally
-RUN npm install -g pm2
 
 # Builder stage
 FROM base AS builder
