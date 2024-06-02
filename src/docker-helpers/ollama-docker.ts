@@ -8,19 +8,25 @@ export async function startOllamaContainer(
   gpuIds: string[],
   port: string
 ) {
-  await upOne(containerName, {
-    cwd: dockerFilesPath,
-    env: {
-      NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
-      COMPOSE_PORT: port,
-    },
-    log: true,
-    composeOptions: [
-      '--file',
-      'docker-compose-ollama-gpu.yml',
-      '--no-recreate',
-    ],
-  });
+  try {
+    const options = {
+      cwd: dockerFilesPath,
+      env: {
+        NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
+        COMPOSE_PORT: port,
+      },
+      config: 'docker-compose-ollama-gpu.yml',
+      log: true,
+    };
+
+    console.log('Starting container with the following options:', options);
+
+    await upOne(containerName, options);
+  } catch (error) {
+    console.error(
+      `Error starting container ${containerName} with gpus ${gpuIds} on port ${port}: ${error}`
+    );
+  }
 }
 
 export async function stopOllamaContainer(containerName: string) {
@@ -31,7 +37,7 @@ export async function stopOllamaContainer(containerName: string) {
     });
     console.log(`Container ${containerName} stopped successfully.`);
   } catch (error) {
-    console.error(`Error stopping container ${containerName}:`, error);
+    console.error(`Error stopping container ${containerName}: ${error}`);
   }
 }
 
@@ -44,7 +50,7 @@ export async function stopAllOllamaContainers() {
     });
     console.log(`All containers stopped successfully.`);
   } catch (error) {
-    console.error(`Error ollama stopping containers:`, error);
+    console.error(`Error stopping all ollama containers:`, error);
   }
 }
 
@@ -52,12 +58,18 @@ export async function loadModelToGPUs(
   containerName: string,
   modelName: string
 ) {
-  await exec(containerName, `ollama pull ${modelName}`, {
-    cwd: dockerFilesPath,
-    config: 'docker-compose-ollama-gpu.yml',
-  });
-  await exec(containerName, `ollama keep-alive ${modelName} -1`, {
-    cwd: dockerFilesPath,
-    config: 'docker-compose-ollama-gpu.yml',
-  });
+  try {
+    await exec(containerName, `ollama pull ${modelName}`, {
+      cwd: dockerFilesPath,
+      config: 'docker-compose-ollama-gpu.yml',
+    });
+    await exec(containerName, `ollama keep-alive ${modelName} -1`, {
+      cwd: dockerFilesPath,
+      config: 'docker-compose-ollama-gpu.yml',
+    });
+  } catch (error) {
+    console.error(
+      `Error starting model ${modelName}, for container ${containerName}. Error: ${error}`
+    );
+  }
 }
