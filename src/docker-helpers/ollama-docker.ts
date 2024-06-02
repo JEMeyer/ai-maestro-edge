@@ -1,6 +1,5 @@
 import { downAll, downOne, exec, upOne } from 'docker-compose/dist/v2';
 import { join } from 'path';
-import { execSync } from 'child_process';
 
 const dockerFilesPath = join(__dirname, '..', 'dockerfiles');
 
@@ -10,21 +9,6 @@ export async function startOllamaContainer(
   port: string
 ) {
   try {
-    // Log the current PATH environment variable
-    console.log('Current PATH:', process.env.PATH);
-
-    // Check if Docker is available in the PATH
-    try {
-      const dockerVersion = execSync('docker --version').toString();
-      console.log('Docker version:', dockerVersion);
-    } catch (err) {
-      console.error(
-        'Docker is not available in the PATH or not installed properly:',
-        err
-      );
-      return;
-    }
-
     const options = {
       cwd: dockerFilesPath,
       env: {
