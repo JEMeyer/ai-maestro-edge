@@ -7,7 +7,7 @@
     "prepare": "npm run build",
     "build": "tsc && node dist/scripts/add-shebang.js",
     "start": "node dist/main.js",
-    "dev": "tsc-watch --onSuccess \"node dist/main.js\"",
+    "dev": "tsc --watch & node dist/main.js",
     "lint": "eslint --fix \"src/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
