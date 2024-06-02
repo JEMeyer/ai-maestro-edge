@@ -2,7 +2,12 @@
 FROM node:18-alpine as base
 
 # Install Docker CLI and Docker Compose
-RUN apk add --no-cache docker docker-cli-compose
+RUN apk add --no-cache docker docker-cli-compose shadow
+
+ARG USERNAME=appuser
+RUN adduser --disabled-password --gecos "" $USERNAME
+RUN addgroup $USERNAME docker
+USER $USERNAME
 
 # Install PM2 globally
 RUN npm install -g pm2
@@ -11,7 +16,7 @@ RUN npm install -g pm2
 FROM base AS builder
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -29,16 +34,16 @@ RUN npm run build
 FROM base
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy the package.json and package-lock.json files from the builder image
-COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=builder /app/package*.json ./
 
 # Copy the built JavaScript files from the builder image
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /app/dist ./dist
 
 # Copy the needed dockerfiles to the dockerfiles folder
-COPY --from=builder /usr/src/app/src/dockerfiles ./dist/dockerfiles/
+COPY --from=builder /app/src/dockerfiles ./dist/dockerfiles/
 
 # Install production dependencies
 RUN npm ci --only=production
