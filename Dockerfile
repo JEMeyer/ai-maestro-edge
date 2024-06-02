@@ -13,11 +13,14 @@ FROM base AS builder
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files and the application source code to the working directory
-COPY . .
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Install the application dependencies
-RUN npm install
+# Install dependencies
+RUN npm ci
+
+# Copy the rest of the project files
+COPY . .
 
 # Build the TypeScript code to JavaScript
 RUN npm run build
@@ -35,13 +38,10 @@ COPY --from=builder /usr/src/app/package*.json ./
 COPY --from=builder /usr/src/app/dist ./dist
 
 # Copy the needed dockerfiles to the dockerfiles folder
-COPY --from=builder /usr/src/app/src/dockerfiles/*.yml ./dist/dockerfiles/
+COPY --from=builder /usr/src/app/src/dockerfiles ./dist/dockerfiles/
 
 # Install production dependencies
 RUN npm ci --only=production
-
-# Copy the application source code
-COPY . .
 
 # Expose the port your application listens on
 EXPOSE 4000

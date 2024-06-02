@@ -1,5 +1,3 @@
-name: ollama
-
 services:
   ollama:
     image: ollama/ollama
