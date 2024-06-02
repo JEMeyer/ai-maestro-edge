@@ -1,5 +1,5 @@
 {
-  "name": "@jemeyer/llm-manager-edge",
+  "name": "llm-manager-edge",
   "version": "1.0.0",
   "description": "REST API to control LLM Docker containers",
   "main": "dist/main.js",
@@ -17,9 +17,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JEMeyer/llm-manager-edge.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "files": [
     "dist",
