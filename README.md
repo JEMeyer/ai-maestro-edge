@@ -1,2 +1,3 @@
-# llm-manager-node
- Node service controled by llm-manager
+# llm-manager-edge
+
+Node service controled by llm-manager
