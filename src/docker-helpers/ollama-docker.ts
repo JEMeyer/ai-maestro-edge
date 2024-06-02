@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { getMappedPort } from './utils';
 
 export async function startOllamaContainer(
   containerName: string,
@@ -71,14 +72,28 @@ export async function loadModelToGPUs(
       stdio: 'inherit', // This will print the output to the console
     });
 
+    console.log(`Model ${modelName} pulled for ${containerName}.`);
+
+    // Get the port on this machine for the particular container's ollama port
+    const port = getMappedPort(containerName, 11434);
+
     // Run the 'ollama keep-alive' command inside the container
-    execSync(`docker exec ${containerName} ollama keep-alive ${modelName} -1`, {
-      stdio: 'inherit', // This will print the output to the console
+    const response = await fetch(`http://localhost:${port}/api/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: modelName,
+        keep_alive: -1,
+      }),
     });
 
-    console.log(
-      `Model ${modelName} loaded and kept alive for container ${containerName}.`
-    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log(`Model ${modelName} kept alive for ${containerName}.`);
   } catch (error) {
     console.error(
       `Error starting model ${modelName}, for container ${containerName}:`,
