@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc && node scripts/add-shebang.js",
+    "build": "tsc && node dist/scripts/add-shebang.js",
     "start": "node dist/main.js",
     "dev": "tsc-watch --onSuccess \"node dist/main.js\"",
     "lint": "eslint --fix \"src/**/*.ts\"",

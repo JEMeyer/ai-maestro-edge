@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs';
 import { join } from 'path';
 
-const filePath = join(__dirname, '..', 'dist', 'main.js');
+const filePath = join(__dirname, '..', 'main.js');
 const shebang = '#!/usr/bin/env node\n';
 
 readFile(filePath, 'utf8', (err, data) => {
