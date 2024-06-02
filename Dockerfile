@@ -13,13 +13,7 @@ ARG USER_UID=1000
 ARG USER_GID=1000
 
 # Check if the GID is already in use, if so, find an available GID
-RUN if getent group $USER_GID; then \
-        USER_GID=$(getent group | awk -F: '{if ($3 >= 1000) print $3}' | sort -n | tail -1 | awk '{print $1+1}'); \
-    fi && \
-    if getent passwd $USER_UID; then \
-        USER_UID=$(getent passwd | awk -F: '{if ($3 >= 1000) print $3}' | sort -n | tail -1 | awk '{print $1+1}'); \
-    fi && \
-    addgroup -g $USER_GID $USERNAME && \
+RUN addgroup -g $USER_GID $USERNAME && \
     adduser --disabled-password -u $USER_UID -G $USERNAME $USERNAME && \
     addgroup $USERNAME docker
 
