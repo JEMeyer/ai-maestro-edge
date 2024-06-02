@@ -14,6 +14,7 @@ export async function startOllamaContainer(
       env: {
         NVIDIA_VISIBLE_DEVICES: gpuIds.join(','),
         COMPOSE_PORT: port,
+        CONTAINER_NAME: containerName,
       },
       config: 'docker-compose-ollama-gpu.yml',
       log: true,
@@ -21,7 +22,7 @@ export async function startOllamaContainer(
 
     console.log('Starting container with the following options:', options);
 
-    await upOne(containerName, options);
+    await upOne('ollama', options);
   } catch (error) {
     console.error(
       `Error starting container ${containerName} with gpus ${gpuIds} on port ${port}: ${error}`

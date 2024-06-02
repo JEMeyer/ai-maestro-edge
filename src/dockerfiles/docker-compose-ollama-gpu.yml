@@ -1,6 +1,7 @@
 services:
   ollama:
     image: ollama/ollama
+    container_name: ${CONTAINER_NAME}
     ports:
       - '${COMPOSE_PORT}:11434'
     volumes:
