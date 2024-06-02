@@ -1,6 +1,8 @@
 # Use a minimal Node.js base image
 FROM node:18-alpine as base
-COPY --from=docker:latest /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# Install Docker CLI and Docker Compose
+RUN apk add --no-cache docker docker-cli-compose
 
 # Install PM2 globally
 RUN npm install -g pm2
