@@ -1,10 +1,10 @@
 # Use a minimal Node.js base image
 FROM node:18-alpine as base
 
-# Install Docker CLI and Docker Compose
+# Install Docker CLI, Docker Compose, and shadow package for user management
 RUN apk add --no-cache docker docker-cli-compose shadow
 
-# Install PM2 globally
+# Install PM2 globally as root
 RUN npm install -g pm2
 
 # Create a non-root user and add it to the docker group
@@ -22,6 +22,9 @@ RUN if getent group $USER_GID; then \
     addgroup -g $USER_GID $USERNAME && \
     adduser --disabled-password -u $USER_UID -G $USERNAME $USERNAME && \
     addgroup $USERNAME docker
+
+# Switch to the non-root user
+USER $USERNAME
 
 # Builder stage
 FROM base AS builder
