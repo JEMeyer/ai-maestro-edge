@@ -2,7 +2,7 @@
 npm install
 
 # Build the application
-tsc
+npm run build
 
 # Start the application
-node dist/main.js
+npm start
