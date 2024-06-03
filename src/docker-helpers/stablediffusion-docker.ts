@@ -15,7 +15,7 @@ export async function startSDContainer(
       --gpus '"device=${gpuDevices}"' \
       ghcr.io/jemeyer/stablediffusion-fastapi-multigpu:latest`;
 
-    console.log('Starting container with the following command:', command);
+    console.log('Starting SD container with the following command:', command);
 
     execSync(command, { stdio: 'inherit' });
     console.log(`Container ${containerName} started successfully.`);
@@ -33,7 +33,7 @@ export async function stopSDContainer(containerName: string) {
     execSync(`docker rm ${containerName}`, { stdio: 'inherit' });
     console.log(`Container ${containerName} stopped and removed successfully.`);
   } catch (error) {
-    console.error(`Error stopping container ${containerName}:`, error);
+    console.error(`Error stopping SD container ${containerName}:`, error);
   }
 }
 
@@ -57,6 +57,6 @@ export async function stopAllSDContainers() {
       console.log(`No stable diffusion containers found.`);
     }
   } catch (error) {
-    console.error(`Error stopping containers:`, error);
+    console.error(`Error stopping SD containers:`, error);
   }
 }
