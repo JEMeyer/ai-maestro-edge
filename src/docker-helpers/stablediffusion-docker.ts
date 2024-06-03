@@ -60,3 +60,23 @@ export async function stopAllSDContainers() {
     console.error(`Error stopping SD containers:`, error);
   }
 }
+
+export async function loadSDModelToGPUs(containerName: string) {
+  // Get container IP address (replace `containerName` with your actual container name)
+  const ipAddress = execSync(
+    `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${containerName}`
+  )
+    .toString()
+    .trim();
+
+  // Construct URL to the endpoint (replace '/endpoint' with the path of your actual endpoint)
+  const url = `http://${ipAddress}:8000/txt2img`;
+
+  await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ prompt: 'warm-up' }),
+  });
+}

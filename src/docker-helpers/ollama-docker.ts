@@ -62,7 +62,7 @@ export async function stopAllOllamaContainers() {
   }
 }
 
-export async function loadModelToGPUs(
+export async function loadOllamaModelToGPUs(
   containerName: string,
   modelName: string
 ) {

@@ -2,12 +2,13 @@ import express, { Request, Response } from 'express';
 import minimist from 'minimist';
 
 import {
-  loadModelToGPUs,
+  loadOllamaModelToGPUs,
   startOllamaContainer,
   stopAllOllamaContainers,
   stopOllamaContainer,
 } from './docker-helpers/ollama-docker';
 import {
+  loadSDModelToGPUs,
   startSDContainer,
   stopAllSDContainers,
   stopSDContainer,
@@ -61,13 +62,17 @@ app.post('/down-all-containers', async (_req, res) => {
 
 // Endpoint to receive command to load model into Ollama. Stable diffusion will auto-load on startup
 app.post('/load-model', async (req: Request, res: Response) => {
-  const { modelName, containerName } = req.body as {
+  const { modelName, containerName, mode } = req.body as {
     modelName: string;
     containerName: string;
+    mode?: string;
   };
 
+  // Make initial calls the the container. This speeds up later requests.
+  if (mode === 'diffusion') await loadSDModelToGPUs(containerName);
+
   // run 'ollama run MODEL' command for the given container and model
-  await loadModelToGPUs(containerName, modelName);
+  await loadOllamaModelToGPUs(containerName, modelName);
 
   res.sendStatus(200);
 });
