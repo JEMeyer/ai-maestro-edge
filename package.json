@@ -1,7 +1,7 @@
 {
-  "name": "llm-manager-edge",
-  "version": "1.0.3",
-  "description": "REST API to control LLM Docker containers",
+  "name": "ai-maestro-edge",
+  "version": "1.0.0",
+  "description": "Edge server to control AI Docker containers",
   "main": "dist/main.js",
   "scripts": {
     "prepare": "npm run build",
@@ -12,11 +12,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "llm-manager-edge": "dist/main.js"
+    "ai-maestro-edge": "dist/main.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JEMeyer/llm-manager-edge.git"
+    "url": "git+https://github.com/JEMeyer/ai-maestro-edge.git"
   },
   "files": [
     "dist",

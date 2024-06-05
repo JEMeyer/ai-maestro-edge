@@ -1,21 +1,20 @@
-# llm-manager-edge
+# AI Maestro Edge
 
-Node service controled by llm-manager
-`npm install llm-manager-edge`
-`npx llm-manager-edge`
+Node service controled by ai-maestro-api.
 
-Title: Ollama Docker Management Application
+`npm install ai-maestro-edge`
+`npx ai-maestro-edge`
 
 ## Description
 
-This application is a simple server built using Express that manages the lifecycle and model loading of Ollama containers running in Docker. It provides endpoints for creating, destroying, and managing Ollama instances with specific GPUs and ports. The application also supports loading models into these containers.
+This application is a simple server built using Express that manages the lifecycle and model loading of Ollama or StableDiffusion containers running in Docker. It provides endpoints for creating, destroying, and managing the instances with specific GPUs and ports. The application also supports loading models into these containers.
 
 ## Endpoints
 
-- `POST /up-container`: Creates a new Ollama instance by spinning up a Docker container with the specified name, GPU IDs, and port. Returns a 200 status code upon success.
-- `POST /down-container`: Stops and removes an existing Ollama instance (Docker container) based on its name. Returns a 200 status code upon success.
-- `POST /down-all-containers`: Stops and removes all Ollama instances (Docker containers). Returns a 200 status code upon success.
-- `POST /load-model`: Loads a specified model into a given container by running the 'ollama run MODEL' command for that container and model. Returns a 200 status code upon success.
+- `POST /up-container`: Creates a new instance by spinning up a Docker container with the specified name, GPU IDs, and port. If this is creating a stable diffusion container, you must also pass in diffusionModel with either 'sdxl-turbo' or 'sd-turbo', depending on which model you want the container to run. Returns a 200 status code upon success.
+- `POST /down-container`: Stops and removes an existing instance (Docker container) based on its name. If the model you are downing is a diffusion model, also pass in `mode` with the value "diffusion". Returns a 200 status code upon success.
+- `POST /down-all-containers`: Stops and removes all instances (Docker containers) - both diffusion models and LLMs. Returns a 200 status code upon success.
+- `POST /load-model`: Loads a specified model into a given container by running the 'ollama run MODEL' command for llms, and issues a request to a diffusion container to load that into VRAM. If the model you are downing is a diffusion model, also pass in `mode` with the value "diffusion". Returns a 200 status code upon success.
 - `GET /health`: A simple health check endpoint, which returns a 200 status code if the server is running.
 
 ## Requirements
