@@ -4,6 +4,7 @@ import { join } from 'path';
 const filePath = join(__dirname, '..', 'main.js');
 const shebang = '#!/usr/bin/env node\n';
 
+// Used due to the fact this is an npm package
 readFile(filePath, 'utf8', (err, data) => {
   if (err) throw err;
   if (!data.startsWith(shebang)) {

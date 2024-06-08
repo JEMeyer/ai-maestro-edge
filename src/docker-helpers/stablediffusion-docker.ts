@@ -37,14 +37,18 @@ export async function stopSDContainer(containerName: string) {
   }
 }
 
+function getAllSDContainerIds() {
+  return execSync(
+    `docker ps -q --filter "ancestor=ghcr.io/jemeyer/stablediffusion-fastapi-multigpu"`
+  )
+    .toString()
+    .trim();
+}
+
 export async function stopAllSDContainers() {
   try {
     // Get all container IDs for containers with the image "ghcr.io/jemeyer/stablediffusion-fastapi-multigpu:latest"
-    const containerIds = execSync(
-      `docker ps -q --filter "ancestor=ghcr.io/jemeyer/stablediffusion-fastapi-multigpu"`
-    )
-      .toString()
-      .trim();
+    const containerIds = getAllSDContainerIds();
 
     if (containerIds) {
       // Stop all containers with the specified image

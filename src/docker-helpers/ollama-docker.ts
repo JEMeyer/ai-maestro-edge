@@ -38,14 +38,17 @@ export async function stopOllamaContainer(containerName: string) {
   }
 }
 
+function getOllamaContainerIds() {
+  // Get all container IDs for containers with the name "ollama"
+  return execSync(`docker ps -q --filter "ancestor=ollama/ollama"`)
+    .toString()
+    .trim();
+}
+
 export async function stopAllOllamaContainers() {
   try {
     // Get all container IDs for containers with the name "ollama"
-    const containerIds = execSync(
-      `docker ps -q --filter "ancestor=ollama/ollama"`
-    )
-      .toString()
-      .trim();
+    const containerIds = getOllamaContainerIds();
 
     if (containerIds) {
       // Stop all containers with the ancestor "ollama/ollama"

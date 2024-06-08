@@ -21,6 +21,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.get('/get-running-containers', async (req, res) => {
+//   const runningContainers = await getRunningContainers();
+//   return res.status(200).send(runningContainers);
+// });
+
 // Endpoint to create a new instance (or make sure it's up)
 app.post('/up-container', async (req, res) => {
   const { containerName, gpuIds, port, diffusionModel } = req.body as {
