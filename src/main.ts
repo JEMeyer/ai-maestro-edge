@@ -75,9 +75,9 @@ app.post('/load-model', async (req: Request, res: Response) => {
 
   // Make initial calls the the container. This speeds up later requests.
   if (mode === 'diffusion') await loadSDModelToGPUs(containerName);
-
-  // run 'ollama run MODEL' command for the given container and model
-  await loadOllamaModelToGPUs(containerName, modelName);
+  else if (mode === 'tts') console.log('up tts here');
+  else if (mode === 'stt') console.log('up stt here');
+  else await loadOllamaModelToGPUs(containerName, modelName);
 
   res.sendStatus(200);
 });
