@@ -30,3 +30,11 @@ This application is a simple server built using Express that manages the lifecyc
 3. Install dependencies: `npm install`
 4. Start the server: `npm start` or `node main.ts`
 5. Use an API client such as Postman, Curl, or Insomnia to send requests to the provided endpoints.
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
