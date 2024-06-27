@@ -35,3 +35,22 @@ export async function stopAllContainers() {
     console.error(`Error stopping containers:`, error);
   }
 }
+
+export async function getLogs(
+  containerName: string,
+  tail: number,
+  since?: number
+) {
+  try {
+    let command = `docker logs ${containerName} --tail=${tail}`;
+
+    if (since !== undefined) {
+      command += ` --since=${since}s`;
+    }
+    const logs = execSync(command, { encoding: 'utf-8' });
+    return logs.trim();
+  } catch (error) {
+    console.error(`Error getting logs for container ${containerName}:`, error);
+    throw error;
+  }
+}

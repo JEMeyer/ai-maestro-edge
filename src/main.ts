@@ -13,7 +13,11 @@ import {
   loadCoquiModelToGPUs,
   startCoquiContainer,
 } from './docker-helpers/coqui-docker';
-import { stopAllContainers, stopContainer } from './docker-helpers/shared';
+import {
+  getLogs,
+  stopAllContainers,
+  stopContainer,
+} from './docker-helpers/shared';
 import { startWhisperContainer } from './docker-helpers/whisper-docker';
 
 const args = minimist(process.argv.slice(2));
@@ -23,8 +27,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/health-check', (req, res) => {
-  res.send('OK');
+app.get('/logs', async (req, res) => {
+  const {
+    containerName,
+    since,
+    tail = 15,
+  } = req.body as {
+    containerName: string;
+    since?: number;
+    tail?: number;
+  };
+
+  const logs = await getLogs(containerName, tail, since);
+
+  res.send({ logs });
 });
 
 // Endpoint to create a new instance (or make sure it's up)
