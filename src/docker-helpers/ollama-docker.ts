@@ -8,11 +8,12 @@ export async function startOllamaContainer(
 ) {
   try {
     const gpuDevices = gpuIds.join(',');
-    const command = `docker run -d \
-    --name ${containerName} \
-    -p ${port}:11434 \
-    -v ./sharedOllamaDir:/root/.ollama \
-    --gpus '"device=${gpuDevices}"' \
+    const command = `docker run -d
+    --name ${containerName}
+    -p ${port}:11434
+    -v ./sharedOllamaDir:/root/.ollama
+    --gpus '"device=${gpuDevices}"'
+    --restart unless-stopped
     ollama/ollama
   `;
 
@@ -28,41 +29,11 @@ export async function startOllamaContainer(
   }
 }
 
-export async function stopOllamaContainer(containerName: string) {
-  try {
-    execSync(`docker stop ${containerName}`, { stdio: 'inherit' });
-    execSync(`docker rm ${containerName}`, { stdio: 'inherit' });
-    console.log(`Container ${containerName} stopped and removed successfully.`);
-  } catch (error) {
-    console.error(`Error stopping container ${containerName}:`, error);
-  }
-}
-
-function getOllamaContainerIds() {
+export function getOllamaContainerIds() {
   // Get all container IDs for containers with the name "ollama"
   return execSync(`docker ps -q --filter "ancestor=ollama/ollama"`)
     .toString()
     .trim();
-}
-
-export async function stopAllOllamaContainers() {
-  try {
-    // Get all container IDs for containers with the name "ollama"
-    const containerIds = getOllamaContainerIds();
-
-    if (containerIds) {
-      // Stop all containers with the ancestor "ollama/ollama"
-      execSync(`docker stop ${containerIds}`, { stdio: 'inherit' });
-      execSync(`docker rm ${containerIds}`, { stdio: 'inherit' });
-      console.log(
-        `All containers with ancestor "ollama/ollama" stopped and removed successfully.`
-      );
-    } else {
-      console.log(`No containers with ancestor "ollama/ollama" found.`);
-    }
-  } catch (error) {
-    console.error(`Error stopping all ollama containers:`, error);
-  }
 }
 
 export async function loadOllamaModelToGPUs(
