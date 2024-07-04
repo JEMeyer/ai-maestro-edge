@@ -40,7 +40,7 @@ app.get('/logs', async (req, res) => {
 
   const logs = await getLogs(containerName, tail, since);
 
-  res.send({ logs });
+  res.send(logs);
 });
 
 // Endpoint to create a new instance (or make sure it's up)
