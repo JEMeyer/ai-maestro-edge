@@ -1,11 +1,18 @@
+# 🚀 We've Moved!
+
+This project has reached the end of its lifecycle and has been **deprecated**. But don’t worry! We've built something even better: **[AI-Maestro](https://github.com/JEMeyer/ai-maestro)**. 
+
+AI-Maestro is a **faster, more scalable, and actively maintained** solution that replaces and improves upon this project. 
+
+We recommend checking it out for a **better experience and continued support**! 🎉
+
 # AI Maestro Edge
 
+## Description
 Node service controled by ai-maestro-api.
 
 `npm install ai-maestro-edge`
 `npx ai-maestro-edge`
-
-## Description
 
 This application is a simple server built using Express that manages the lifecycle and model loading of Ollama or StableDiffusion containers running in Docker. It provides endpoints for creating, destroying, and managing the instances with specific GPUs and ports. The application also supports loading models into these containers.
 
